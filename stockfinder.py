@@ -3,12 +3,15 @@
 # 1/1/2021
 
 import logging
-import time
-from datetime import datetime
-from configparser import ConfigParser, NoOptionError
-from scrapers import PlayStation5, RTX3060Ti, RTX3070, RTX3080
-from colorama import init, Fore, Style
 import os
+import time
+from configparser import ConfigParser, NoOptionError
+from datetime import datetime
+
+from colorama import init
+from termcolor import colored
+
+from scrapers import PlayStation5, RTX3060Ti, RTX3070, RTX3080
 
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66'}
 MINUTES = 0.5  # how frequent to check for stock
@@ -39,7 +42,7 @@ def process():
 
     if inventory == 0:
         print(
-            Fore.RED + '{} No stock found. Checking again in {} minutes.'.format(getTime(), MINUTES))
+            colored('{} No stock found. Checking again in {} minutes.'.format(getTime(), MINUTES), 'red'))
     time.sleep(MINUTES * 60)
     return True
 
@@ -60,7 +63,7 @@ def main():
 if __name__ == '__main__':
     print('Stock Finder AIO 1.0 by ZBK')
     parser = ConfigParser()
-    init(autoreset=True) #
+    init(autoreset=True)  # needed for color output
     cfg_file = os.path.dirname(os.path.realpath(__file__)) + r'\stockfinder.ini'
 
     if not os.path.isfile(cfg_file):

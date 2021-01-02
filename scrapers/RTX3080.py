@@ -1,9 +1,12 @@
-from bs4 import BeautifulSoup
-import requests
 import webbrowser
 from datetime import datetime
+
+import requests
+from bs4 import BeautifulSoup
+from colorama import init
+from termcolor import colored
+
 from Alert import Alert
-from colorama import init, Fore
 
 
 class RTX3080:
@@ -39,7 +42,7 @@ class RTX3080:
                     link = rtx_elem.find('a')['href']
                     webbrowser.open_new_tab(link)
                     Alert('3080', link)
-                    print(Fore.GREEN + '{} 3080 found: {}'.format(self.getTime(), link))
+                    print(colored('{} 3080 found: {}'.format(self.getTime(), link), 'green'))
                     # writeToFile(link)
                     # return 1
             print('[{} / {}]'.format(inventory, totalinventory))
@@ -64,7 +67,7 @@ class RTX3080:
                     link = 'https://www.bestbuy.com' + rtx_elem.find('a')['href']
                     webbrowser.open_new_tab(link)
                     Alert('3080', link)
-                    print(Fore.GREEN + '{} 3080 found: {}'.format(self.getTime(), link))
+                    print(colored('{} 3080 found: {}'.format(self.getTime(), link), 'green'))
                     # writeToFile(URL)
                     # return 1
             print('[{} / {}]'.format(inventory, totalinventory))

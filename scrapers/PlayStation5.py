@@ -3,7 +3,8 @@ from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
-from colorama import init, Fore
+from colorama import init
+from termcolor import colored
 
 from Alert import Alert
 
@@ -63,7 +64,7 @@ class PlayStation5:
                     link = 'https://www.samsclub.com' + ps5_elem.find('a')['href']
                     webbrowser.open_new_tab(link)
                     Alert('PS5', link)
-                    print(Fore.GREEN + '{} PS5 found: {}'.format(self.getTime(), link))
+                    print(colored('{} PS5 found: {}'.format(self.getTime(), link), 'green'))
                     # writeToFile(link)
                     # return 1
             print('[{} / {}]'.format(inventory, totalinventory))
@@ -94,7 +95,7 @@ class PlayStation5:
                     link = ps5_elem.find('a')['href']
                     webbrowser.open_new_tab(link)
                     Alert('PS5', link)
-                    print(Fore.GREEN + '{} PS5 found: {}'.format(self.getTime(), link))
+                    print(colored('{} PS5 found: {}'.format(self.getTime(), link), 'green'))
                     # writeToFile(link)
                     # return 1
             print('[{} / {}]'.format(inventory, totalinventory))
@@ -118,7 +119,7 @@ class PlayStation5:
                     inventory += 1
                     webbrowser.open_new_tab(URL)
                     Alert('PS5', URL)
-                    print(Fore.GREEN + '{} PS5 found: {}'.format(self.getTime(), URL))
+                    print(colored('{} PS5 found: {}'.format(self.getTime(), URL), 'green'))
                     # writeToFile(URL)
                     # return 1
             print('[{} / {}]'.format(inventory, totalinventory))
@@ -142,7 +143,7 @@ class PlayStation5:
                 inventory += 1
                 webbrowser.open_new_tab(URL)
                 Alert('PS5 Digital', URL)
-                print(Fore.GREEN + '{} PS5 found: {}'.format(self.getTime(), URL))
+                print(colored('{} PS5 found: {}'.format(self.getTime(), URL), 'green'))
                 # writeToFile(URL)
                 # return 1
             # PS5 Disc Edition
@@ -154,7 +155,7 @@ class PlayStation5:
                 inventory += 1
                 webbrowser.open_new_tab(URL)
                 Alert('PS5', URL)
-                print(Fore.GREEN + '{} PS5 found: {}'.format(self.getTime(), URL))
+                print(colored('{} PS5 found: {}'.format(self.getTime(), URL), 'green'))
                 # writeToFile(URL)
                 # return 1
             print('[{} / {}]'.format(inventory, totalinventory))
@@ -179,7 +180,7 @@ class PlayStation5:
                     link = 'https://www.bestbuy.com' + ps5_elem.find('a')['href']
                     webbrowser.open_new_tab(link)
                     Alert('PS5', link)
-                    print(Fore.GREEN + '{} PS5 found: {}'.format(self.getTime(), link))
+                    print(colored('{} PS5 found: {}'.format(self.getTime(), link), 'green'))
                     # writeToFile(URL)
                     # return 1
             print('[{} / {}]'.format(inventory, totalinventory))
