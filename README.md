@@ -8,6 +8,7 @@ Stockfinder.ini will be generated in the same directory as stockfinder.py.
 Example: ps5 = 0 # don't search for ps5
 
 # Emails and SMS alerts
+SMS functionality is afforded by twilio: https://www.twilio.com/ Sign up for a free trial and plug in your api credentials inside Alert.py.
 To have emails and text message alerts sent, fill in your credentials inside the Alert.py file. Highly recommended to use a dummy email. This will soon be deprecated.
 
 # Other notes
