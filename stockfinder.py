@@ -8,13 +8,13 @@ import time
 from configparser import ConfigParser, NoOptionError
 from datetime import datetime
 
-from scrapers import PlayStation5, RTX3060Ti, RTX3070, RTX3080
+from scrapers import PlayStation5, RTX3060Ti, RTX3070, RTX3080, R5600x
 
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66'}
 MINUTES = 0.5  # how frequent to check for stock
 
 # Default Flags
-PS5_FLAG = RTX3060TI_FLAG = RTX3070_FLAG = RTX3080_FLAG = 1
+PS5_FLAG = RTX3060TI_FLAG = RTX3070_FLAG = RTX3080_FLAG = R5600X_FLAG = 1
 
 
 def process():
@@ -37,9 +37,15 @@ def process():
         r3080 = RTX3080(HEADERS)
         inventory += r3080.getStock()
 
+    if R5600X_FLAG:
+        print('{} Searching for R5600X stock...'.format(getTime()))
+        r5600x = R5600x(HEADERS)
+        inventory += r5600x.getStock()
+
     if inventory == 0:
-        print(
-            '{} No stock found. Checking again in {} minutes.'.format(getTime(), MINUTES))
+        print('{} No stock found. Checking again in {} minutes.'.format(getTime(), MINUTES))
+    else:
+        print('{} Stock found! Checking again in {} minutes.'.format(getTime(), MINUTES))
     time.sleep(MINUTES * 60)
     return True
 
@@ -67,7 +73,7 @@ if __name__ == '__main__':
 
     if not os.path.isfile(cfg_file):
         try:
-            parser['OPTIONS'] = {"ps5": "1", "rtx3060ti": "1", "rtx3070": "1", "rtx3080": "1"}
+            parser['OPTIONS'] = {"ps5": "1", "rtx3060ti": "1", "rtx3070": "1", "rtx3080": "1", "r5600x": "1"}
             parser['CREDENTIALS'] = {"email": "", "password": "", "from_number": "+1234567890",
                                      "to_number": "+1234567890"}
             with open('stockfinder.ini', 'w') as configfile:
@@ -81,8 +87,12 @@ if __name__ == '__main__':
         RTX3060TI_FLAG = parser.getint('OPTIONS', 'rtx3060ti')
         RTX3070_FLAG = parser.getint('OPTIONS', 'rtx3070')
         RTX3080_FLAG = parser.getint('OPTIONS', 'rtx3080')
-        configuration = 'Search options: PS5 [{}] 3060 Ti [{}] 3070 [{}] 3080 [{}]'.format(PS5_FLAG, RTX3060TI_FLAG,
-                                                                                           RTX3070_FLAG, RTX3080_FLAG)
+        R5600X_FLAG = parser.getint('OPTIONS', 'r5600x')
+        configuration = 'Search options: PS5 [{}] 3060 Ti [{}] 3070 [{}] 3080 [{}] 5600X [{}]'.format(PS5_FLAG,
+                                                                                                      RTX3060TI_FLAG,
+                                                                                                      RTX3070_FLAG,
+                                                                                                      RTX3080_FLAG,
+                                                                                                      R5600X_FLAG)
         configuration = configuration.replace('[0]', '[N]').replace('[1]', '[Y]')
         print(configuration)
     except(ValueError, NoOptionError, Exception) as e:
