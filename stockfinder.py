@@ -60,7 +60,10 @@ def main():
 if __name__ == '__main__':
     print('Stock Finder AIO 1.0 by ZBK')
     parser = ConfigParser()
-    cfg_file = os.path.dirname(os.path.realpath(__file__)) + r'\stockfinder.ini'
+    suffix = '.ini'
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    cfg_file = os.path.join(dir_path, 'stockfinder' + suffix)
+    print(cfg_file)
 
     if not os.path.isfile(cfg_file):
         try:
