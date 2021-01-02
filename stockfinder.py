@@ -8,9 +8,6 @@ import time
 from configparser import ConfigParser, NoOptionError
 from datetime import datetime
 
-from colorama import init
-from termcolor import colored
-
 from scrapers import PlayStation5, RTX3060Ti, RTX3070, RTX3080
 
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66'}
@@ -42,7 +39,7 @@ def process():
 
     if inventory == 0:
         print(
-            colored('{} No stock found. Checking again in {} minutes.'.format(getTime(), MINUTES), 'red'))
+            '{} No stock found. Checking again in {} minutes.'.format(getTime(), MINUTES))
     time.sleep(MINUTES * 60)
     return True
 
@@ -63,13 +60,13 @@ def main():
 if __name__ == '__main__':
     print('Stock Finder AIO 1.0 by ZBK')
     parser = ConfigParser()
-    init(autoreset=True)  # needed for color output
     cfg_file = os.path.dirname(os.path.realpath(__file__)) + r'\stockfinder.ini'
 
     if not os.path.isfile(cfg_file):
         try:
             parser['OPTIONS'] = {"ps5": "1", "rtx3060ti": "1", "rtx3070": "1", "rtx3080": "1"}
-            parser['CREDENTIALS'] = {"email": "", "password": "", "from_number": "+1234567890", "to_number": "+1234567890"}
+            parser['CREDENTIALS'] = {"email": "", "password": "", "from_number": "+1234567890",
+                                     "to_number": "+1234567890"}
             with open('stockfinder.ini', 'w') as configfile:
                 parser.write(configfile)
         except Exception as e:

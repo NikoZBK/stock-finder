@@ -3,15 +3,16 @@ from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
-from colorama import init
-from termcolor import colored
 
 from Alert import Alert
 
 
+def getTime():
+    return '[{}]'.format(datetime.now().strftime("%H:%M:%S"))
+
+
 class RTX3070:
     def __init__(self, headers):
-        init(autoreset=True)
         self.headers = headers
         self.stock = 0
         self.getBestBuy()
@@ -42,7 +43,7 @@ class RTX3070:
                     link = rtx_elem.find('a')['href']
                     webbrowser.open_new_tab(link)
                     Alert('3070', link)
-                    print(colored('{} 3070 found: {}'.format(self.getTime(), link), 'green'))
+                    print('\n{} 3070 found: {}'.format(getTime(), link))
                     # writeToFile(link)
                     # return 1
 
@@ -68,7 +69,7 @@ class RTX3070:
                     link = 'https://www.bestbuy.com' + rtx_elem.find('a')['href']
                     webbrowser.open_new_tab(link)
                     Alert('3070', link)
-                    print(colored('{} 3070 found: {}'.format(self.getTime(), link), 'green'))
+                    print('\n{} 3070 found: {}'.format(getTime(), link))
                     # writeToFile(URL)
                     # return 1
             print('[{} / {}]'.format(inventory, totalinventory))
@@ -76,6 +77,3 @@ class RTX3070:
         except(ConnectionError, Exception) as e:
             print('Exception trying to retrieve bestbuy data. [{}]'.format(e))
         # return 0
-
-    def getTime(self):
-        return '[{}]'.format(datetime.now().strftime("%H:%M:%S"))
