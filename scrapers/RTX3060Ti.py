@@ -4,6 +4,7 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
+import stockfinder
 from Alert import Alert
 
 
@@ -12,8 +13,11 @@ def getTime():
 
 
 class RTX3060Ti:
-    def __init__(self, headers):
-        self.headers = headers
+    def __init__(self, link_flag, email_flag, sms_flag):
+        self.HEADERS = stockfinder.HEADERS
+        self.LINK_FLAG = link_flag
+        self.EMAIL_FLAG = email_flag
+        self.SMS_FLAG = sms_flag
         self.stock = 0
         self.getBestBuy()
         self.getNewEgg()
@@ -27,10 +31,9 @@ class RTX3060Ti:
 
     def getNewEgg(self):
         print('Checking Newegg...\t', end='', flush='True')
-
         URL = 'https://www.newegg.com/p/pl?d=3060+ti&LeftPriceRange=399+450'  # Price Range: $399 - $450
         try:
-            page = requests.get(URL, headers=self.headers)
+            page = requests.get(URL, headers=self.HEADERS)
             soup = BeautifulSoup(page.content, 'html.parser')
             rtx_elems = soup.find_all(class_='item-container')
             inventory = 0
@@ -41,8 +44,10 @@ class RTX3060Ti:
                 if in_stock:
                     inventory += 1
                     link = rtx_elem.find('a')['href']
-                    webbrowser.open_new_tab(link)
-                    Alert('3060Ti', link)
+                    if self.LINK_FLAG:
+                        webbrowser.open_new_tab(link)
+                    if self.EMAIL_FLAG or self.SMS_FLAG:
+                        Alert('3060Ti', link, self.EMAIL_FLAG, self.SMS_FLAG)
                     print('\n{} 3060 Ti found: {}'.format(getTime(), link))
                     # writeToFile(link)
                     # return 1
@@ -56,7 +61,7 @@ class RTX3060Ti:
         print('Checking BestBuy...\t', end='', flush='True')
         URL = 'https://www.bestbuy.com/site/searchpage.jsp?st=%223060+Ti%22&_dyncharset=UTF-8&_dynSessConf=&id=pcat17071&type=page&sc=Global&cp=1&nrp=&sp=&qp=&list=n&af=true&iht=y&usc=All+Categories&ks=960&keys=keys'
         try:
-            page = requests.get(URL, headers=self.headers)
+            page = requests.get(URL, headers=self.HEADERS)
             soup = BeautifulSoup(page.content, 'html.parser')
             rtx_elems = soup.find_all(class_='fulfillment-add-to-cart-button')
             inventory = 0
@@ -66,8 +71,10 @@ class RTX3060Ti:
                 if in_stock:
                     inventory += 1
                     link = 'https://www.bestbuy.com' + rtx_elem.find('a')['href']
-                    webbrowser.open_new_tab(link)
-                    Alert('3060Ti', link)
+                    if self.LINK_FLAG:
+                        webbrowser.open_new_tab(link)
+                    if self.EMAIL_FLAG or self.SMS_FLAG:
+                        Alert('3060Ti', link, self.EMAIL_FLAG, self.SMS_FLAG)
                     print('\n{} 3060 Ti found: {}'.format(getTime(), link))
                     # writeToFile(URL)
                     # return 1

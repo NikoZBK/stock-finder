@@ -4,6 +4,7 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
+import stockfinder
 from Alert import Alert
 
 
@@ -12,8 +13,11 @@ def getTime():
 
 
 class PlayStation5:
-    def __init__(self, headers):
-        self.headers = headers
+    def __init__(self, link_flag, email_flag, sms_flag):
+        self.HEADERS = stockfinder.HEADERS
+        self.LINK_FLAG = link_flag
+        self.EMAIL_FLAG = email_flag
+        self.SMS_FLAG = sms_flag
         self.stock = 0
         self.getWalmart()
         self.getBestBuy()
@@ -34,7 +38,7 @@ class PlayStation5:
         URL = 'https://www.target.com/c/playstation-5-video-games/-/N-hj96dZ5zja9?Nao=0'
 
         try:
-            page = requests.get(URL, headers=self.headers)
+            page = requests.get(URL, headers=self.HEADERS)
             soup = BeautifulSoup(page.content, 'html.parser')
             ps5_elem = soup.find('div', {'data-test': 'product-card-default'})
             print(ps5_elem)
@@ -50,7 +54,7 @@ class PlayStation5:
         URL = 'https://www.samsclub.com/b/Playstation%205/1206?clubId=6636&offset=0&rootDimension=pcs_availability%253AOnlinepipsymbprice%253A%255B500%2520TO%2520750%255D&searchCategoryId=1206&selectedFilter=all&sortKey=relevance&sortOrder=1'
 
         try:
-            page = requests.get(URL, headers=self.headers)
+            page = requests.get(URL, headers=self.HEADERS)
             soup = BeautifulSoup(page.content, 'html.parser')
             ps5_elems = soup.find_all(class_='sc-pc-medium-desktop-card sc-plp-cards-card')
             inventory = 0
@@ -62,8 +66,10 @@ class PlayStation5:
                 if in_stock:
                     inventory += 1
                     link = 'https://www.samsclub.com' + ps5_elem.find('a')['href']
-                    webbrowser.open_new_tab(link)
-                    Alert('PS5', link)
+                    if self.LINK_FLAG:
+                        webbrowser.open_new_tab(link)
+                    if self.EMAIL_FLAG or self.SMS_FLAG:
+                        Alert('PS5', link, self.EMAIL_FLAG, self.SMS_FLAG)
                     print('\n{} PS5 found: {}'.format(getTime(), link))
                     # writeToFile(link)
                     # return 1
@@ -83,7 +89,7 @@ class PlayStation5:
               '&ASID=https%3A%2F%2Fwww.gamespot.com%2F&ranMID=44583&ranEAID=2424817&ranSiteID=VZfI20jEa0c' \
               '-qpsf9RpsZIMhmwLtRMkO0w&N=101696840%204021 '
         try:
-            page = requests.get(URL, headers=self.headers)
+            page = requests.get(URL, headers=self.HEADERS)
             soup = BeautifulSoup(page.content, 'html.parser')
             ps5_elems = soup.find_all(class_='item-container')
             inventory = 0
@@ -93,8 +99,10 @@ class PlayStation5:
                 if in_stock:
                     inventory += 1
                     link = ps5_elem.find('a')['href']
-                    webbrowser.open_new_tab(link)
-                    Alert('PS5', link)
+                    if self.LINK_FLAG:
+                        webbrowser.open_new_tab(link)
+                    if self.SMS_FLAG or self.EMAIL_FLAG:
+                        Alert('PS5', link, self.EMAIL_FLAG, self.SMS_FLAG)
                     print('\n{} PS5 found: {}'.format(getTime(), link))
                     # writeToFile(link)
                     # return 1
@@ -108,7 +116,7 @@ class PlayStation5:
         print('Checking GameStop...\t', end='', flush='True')
         URL = 'https://www.gamestop.com/video-games/playstation-5/consoles'
         try:
-            page = requests.get(URL, headers=self.headers)
+            page = requests.get(URL, headers=self.HEADERS)
             soup = BeautifulSoup(page.content, 'html.parser')
             ps5_elems = soup.findAll(class_='add-to-cart-plp-buttons')
             inventory = 0
@@ -117,8 +125,10 @@ class PlayStation5:
                 in_stock = ps5_elem.text.lower().__contains__('add')
                 if in_stock:
                     inventory += 1
-                    webbrowser.open_new_tab(URL)
-                    Alert('PS5', URL)
+                    if self.LINK_FLAG:
+                        webbrowser.open_new_tab(URL)
+                    if self.EMAIL_FLAG or self.SMS_FLAG:
+                        Alert('PS5', URL, self.EMAIL_FLAG, self.SMS_FLAG)
                     print('\n{} PS5 found: {}'.format(getTime(), URL))
                     # writeToFile(URL)
                     # return 1
@@ -134,27 +144,31 @@ class PlayStation5:
         try:
             # PS5 Digital Edition
             URL = 'https://www.walmart.com/ip/Sony-PlayStation-5-Digital-Edition/493824815'
-            page = requests.get(URL, headers=self.headers)
+            page = requests.get(URL, headers=self.HEADERS)
             soup = BeautifulSoup(page.content, 'html.parser')
             inventory = 0
             totalinventory = 2
             in_stock = not soup.find('span', class_='prod-product-cta-add-to-cart display-inline-block').__eq__(None)
             if in_stock:
                 inventory += 1
-                webbrowser.open_new_tab(URL)
-                Alert('PS5 Digital', URL)
+                if self.LINK_FLAG:
+                    webbrowser.open_new_tab(URL)
+                if self.EMAIL_FLAG or self.SMS_FLAG:
+                    Alert('PS5 Digital', URL, self.EMAIL_FLAG, self.SMS_FLAG)
                 print('\n{} PS5 found: {}'.format(getTime(), URL))
                 # writeToFile(URL)
                 # return 1
             # PS5 Disc Edition
             URL = 'https://www.walmart.com/ip/PlayStation-5-Console/363472942'
-            page = requests.get(URL, headers=self.headers)
+            page = requests.get(URL, headers=self.HEADERS)
             soup = BeautifulSoup(page.content, 'html.parser')
             in_stock = not soup.find('span', class_='prod-product-cta-add-to-cart display-inline-block').__eq__(None)
             if in_stock:
                 inventory += 1
-                webbrowser.open_new_tab(URL)
-                Alert('PS5', URL)
+                if self.LINK_FLAG:
+                    webbrowser.open_new_tab(URL)
+                if self.EMAIL_FLAG or self.SMS_FLAG:
+                    Alert('PS5', URL, self.EMAIL_FLAG, self.SMS_FLAG)
                 print('{} PS5 found: {}'.format(getTime(), URL))
                 # writeToFile(URL)
                 # return 1
@@ -168,7 +182,7 @@ class PlayStation5:
         print('Checking BestBuy...\t', end='', flush='True')
         URL = 'https://www.bestbuy.com/site/playstation-5/ps5-consoles/pcmcat1587395025973.c?id=pcmcat1587395025973'
         try:
-            page = requests.get(URL, headers=self.headers)
+            page = requests.get(URL, headers=self.HEADERS)
             soup = BeautifulSoup(page.content, 'html.parser')
             ps5_elems = soup.find_all(class_='fulfillment-add-to-cart-button')
             inventory = 0
@@ -178,8 +192,10 @@ class PlayStation5:
                 if in_stock:
                     inventory += 1
                     link = 'https://www.bestbuy.com' + ps5_elem.find('a')['href']
-                    webbrowser.open_new_tab(link)
-                    Alert('PS5', link)
+                    if self.LINK_FLAG:
+                        webbrowser.open_new_tab(link)
+                    if self.EMAIL_FLAG or self.SMS_FLAG:
+                        Alert('PS5', link, self.EMAIL_FLAG, self.SMS_FLAG)
                     print('\n{} PS5 found: {}'.format(getTime(), link))
                     # writeToFile(URL)
                     # return 1
