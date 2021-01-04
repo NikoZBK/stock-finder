@@ -66,15 +66,14 @@ if __name__ == '__main__':
     suffix = '.ini'
     dir_path = os.path.dirname(os.path.realpath(__file__))
     cfg_file = os.path.join(dir_path, 'stockfinder' + suffix)
-    print(cfg_file)
 
     if not os.path.isfile(cfg_file):
         try:
             parser['SETTINGS'] = {"timer": "1"}
             parser['OPTIONS'] = {"ps5": "1", "rtx3060ti": "1", "rtx3070": "1", "rtx3080": "1", "r5600x": "1"}
             parser['ALERTS'] = {"link": "0", "email": "0", "sms": "0"}
-            parser['CREDENTIALS'] = {"email": "", "password": "", "from_number": "+1234567890",
-                                     "to_number": "+1234567890"}
+            parser['CREDENTIALS'] = {"email": "", "password": "", "from_number": "+12345678912",
+                                     "to_number": "+12345678912", "account_sid": "", "auth_token": ""}
             with open('stockfinder.ini', 'w') as configfile:
                 parser.write(configfile)
         except Exception as e:

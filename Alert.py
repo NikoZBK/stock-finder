@@ -3,14 +3,15 @@ import ssl
 
 from twilio.rest import Client
 
+import credentials
 
-# TODO: Move emails, passwords, numbers and API credentials to separate file
+
 def sendEmail(self):
     port = 465
 
-    sender_email = ""
-    receiver_email = ""
-    email_password = ""
+    sender_email = credentials.get_email()
+    receiver_email = sender_email
+    email_password = credentials.get_email_password()
     message = """\
         Subject: STOCK ALERT ({})
 
@@ -26,10 +27,10 @@ def sendEmail(self):
 
 
 def sendSMS(self):
-    to_number = '+1234567890'
-    from_number = '+1234567890'
-    account_sid = ''
-    auth_token = ''
+    to_number = credentials.get_to_number()
+    from_number = credentials.get_from_number()
+    account_sid = credentials.get_account_sid()
+    auth_token = credentials.get_auth_token()
     try:
         client = Client(account_sid, auth_token)
         client.messages.create(to=to_number,
@@ -46,7 +47,6 @@ def sendAlerts(self):
         sendSMS(self)
 
 
-# TODO: Get email, password, api credentials, phone numbers from stockfinder.ini
 class Alert:
     def __init__(self, product, url, email_flag, sms_flag):
         self.product = product

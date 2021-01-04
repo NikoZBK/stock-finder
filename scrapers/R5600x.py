@@ -1,5 +1,7 @@
+import re
 import webbrowser
 from datetime import datetime
+from decimal import Decimal
 
 import requests
 from bs4 import BeautifulSoup
@@ -39,7 +41,8 @@ class R5600x:
             product = soup.find(class_='product-buy-box')
             inventory = 0
             totalinventory = 1
-            in_stock = not soup.find(class_='btn btn-message btn-wide').text.lower().strip().__contains__('sold')
+            price = Decimal(re.sub(r'[^\d.]', '', product.find('li', class_='price-current').text.strip()))
+            in_stock = product.find(class_='btn btn-primary btn-wide') and price < 310
             if in_stock:
                 inventory += 1
                 if self.LINK_FLAG:
