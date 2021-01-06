@@ -1,3 +1,4 @@
+import re
 import webbrowser
 from datetime import datetime
 
@@ -181,6 +182,7 @@ class PlayStation5:
     def getBestBuy(self):
         print('Checking BestBuy...\t', end='', flush='True')
         URL = 'https://www.bestbuy.com/site/playstation-5/ps5-consoles/pcmcat1587395025973.c?id=pcmcat1587395025973'
+        stock_available = re.compile('add|see details')
         try:
             page = requests.get(URL, headers=self.HEADERS)
             soup = BeautifulSoup(page.content, 'html.parser')
@@ -188,7 +190,8 @@ class PlayStation5:
             inventory = 0
             totalinventory = len(ps5_elems)
             for ps5_elem in ps5_elems:
-                in_stock = ps5_elem.text.lower().__contains__('add')
+                add_to_cart_text = ps5_elem.text.lower()
+                in_stock = re.search(stock_available, add_to_cart_text)
                 if in_stock:
                     inventory += 1
                     link = 'https://www.bestbuy.com' + ps5_elem.find('a')['href']

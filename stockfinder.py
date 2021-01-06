@@ -2,7 +2,6 @@
 # Searches for PS5, RTX 3000 Series Stock
 # 1/3/2021
 
-import logging
 import os
 import re
 import time
@@ -105,6 +104,4 @@ if __name__ == '__main__':
         print(configuration)
     except(ValueError, NoOptionError, Exception) as e:
         print('Exception reading configuration file: [{}]'.format(e))
-    logging.basicConfig(level=logging.DEBUG, filename="stockfinder_log.txt", filemode="a+",
-                        format="%(asctime)-15s %(levelname)-8s %(message)s")
     main()

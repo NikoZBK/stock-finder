@@ -1,3 +1,4 @@
+import re
 import webbrowser
 from datetime import datetime
 
@@ -60,6 +61,7 @@ class RTX3060Ti:
     def getBestBuy(self):
         print('Checking BestBuy...\t', end='', flush='True')
         URL = 'https://www.bestbuy.com/site/searchpage.jsp?st=%223060+Ti%22&_dyncharset=UTF-8&_dynSessConf=&id=pcat17071&type=page&sc=Global&cp=1&nrp=&sp=&qp=&list=n&af=true&iht=y&usc=All+Categories&ks=960&keys=keys'
+        stock_available = re.compile('add|see details')
         try:
             page = requests.get(URL, headers=self.HEADERS)
             soup = BeautifulSoup(page.content, 'html.parser')
@@ -67,7 +69,8 @@ class RTX3060Ti:
             inventory = 0
             totalinventory = len(rtx_elems)
             for rtx_elem in rtx_elems:
-                in_stock = rtx_elem.text.lower().__contains__('add')
+                add_to_cart_text = rtx_elem.text.lower()
+                in_stock = re.search(stock_available, add_to_cart_text)
                 if in_stock:
                     inventory += 1
                     link = 'https://www.bestbuy.com' + rtx_elem.find('a')['href']

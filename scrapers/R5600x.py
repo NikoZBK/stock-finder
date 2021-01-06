@@ -61,6 +61,7 @@ class R5600x:
     def getBestBuy(self):
         print('Checking BestBuy...\t', end='', flush='True')
         URL = 'https://www.bestbuy.com/site/amd-ryzen-5-5600x-4th-gen-6-core-12-threads-unlocked-desktop-processor-with-wraith-stealth-cooler/6438943.p?skuId=6438943'
+        stock_available = re.compile('add|see details')
         try:
             page = requests.get(URL, headers=self.HEADERS)
             soup = BeautifulSoup(page.content, 'html.parser')
