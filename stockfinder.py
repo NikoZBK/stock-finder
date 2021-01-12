@@ -43,6 +43,7 @@ def process():
         print('{} No stock found. Checking again in {} minutes.'.format(get_time(), MINUTES))
     else:
         print('{} Stock found! Checking again in {} minutes.'.format(get_time(), MINUTES))
+        # return False
     time.sleep(MINUTES * 60)
     return True
 

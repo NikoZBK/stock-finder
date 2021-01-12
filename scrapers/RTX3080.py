@@ -33,16 +33,18 @@ class RTX3080:
     def getNewEgg(self):
         print('Checking Newegg...\t', end='', flush='True')
 
-        URL = 'https://www.newegg.com/p/pl?d=rtx+3080&LeftPriceRange=699.99+750'  # Price Range: $699 - $750
+        URL = 'https://www.newegg.com/p/pl?d=rtx+3080&LeftPriceRange=699+900'  # Price Range: $699 - $900
         try:
             page = requests.get(URL, headers=self.HEADERS)
             soup = BeautifulSoup(page.content, 'html.parser')
-            rtx_elems = soup.find_all(class_='item-container')
+            rtx_elems = soup.find_all(class_='item-button-area')
             inventory = 0
             totalinventory = len(rtx_elems)
             for rtx_elem in rtx_elems:
-                product_name = rtx_elem.find(class_='item-title').text.strip()
-                in_stock = rtx_elem.find(class_='item-button-area').text.lower().strip().__contains__('add')
+                if rtx_elem.__eq__(None):
+                    totalinventory -= 1
+                    continue
+                in_stock = rtx_elem.text.lower().strip().__contains__('add')
                 if in_stock:
                     inventory += 1
                     link = rtx_elem.find('a')['href']

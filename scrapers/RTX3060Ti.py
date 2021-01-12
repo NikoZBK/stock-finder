@@ -32,7 +32,7 @@ class RTX3060Ti:
 
     def getNewEgg(self):
         print('Checking Newegg...\t', end='', flush='True')
-        URL = 'https://www.newegg.com/p/pl?d=3060+ti&LeftPriceRange=399+450'  # Price Range: $399 - $450
+        URL = 'https://www.newegg.com/p/pl?d=3060+ti&LeftPriceRange=399+530'  # Price Range: $399 - $530
         try:
             page = requests.get(URL, headers=self.HEADERS)
             soup = BeautifulSoup(page.content, 'html.parser')
@@ -40,7 +40,9 @@ class RTX3060Ti:
             inventory = 0
             totalinventory = len(rtx_elems)
             for rtx_elem in rtx_elems:
-                product_name = rtx_elem.find(class_='item-title').text.strip()
+                if rtx_elem.__eq__(None):
+                    totalinventory -= 1
+                    continue
                 in_stock = rtx_elem.find(class_='item-button-area').text.lower().strip().__contains__('add')
                 if in_stock:
                     inventory += 1

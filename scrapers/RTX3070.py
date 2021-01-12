@@ -33,7 +33,7 @@ class RTX3070:
     def getNewEgg(self):
         print('Checking Newegg...\t', end='', flush='True')
 
-        URL = 'https://www.newegg.com/p/pl?d=rtx+3070&LeftPriceRange=499+600'  # Price Range: $499 - $600
+        URL = 'https://www.newegg.com/p/pl?d=rtx+3070&LeftPriceRange=499+700'  # Price Range: $499 - $700
         try:
             page = requests.get(URL, headers=self.HEADERS)
             soup = BeautifulSoup(page.content, 'html.parser')

@@ -20,7 +20,7 @@ class PlayStation5:
         self.EMAIL_FLAG = email_flag
         self.SMS_FLAG = sms_flag
         self.stock = 0
-        self.getAmazon()
+        # self.getAmazon()
         self.getWalmart()
         self.getBestBuy()
         self.getNewEgg()
